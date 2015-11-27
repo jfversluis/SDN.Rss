@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Foundation;
+﻿using Foundation;
 using UIKit;
 
 namespace SDN.Rss.iOS
@@ -23,6 +19,10 @@ namespace SDN.Rss.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+
+            UIApplication.SharedApplication.SetStatusBarHidden(false, true);
+            UIApplication.SharedApplication.SetStatusBarStyle(UIStatusBarStyle.LightContent, true);
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

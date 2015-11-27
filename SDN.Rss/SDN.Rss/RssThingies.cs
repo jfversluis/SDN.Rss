@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Xamarin.Forms;
 
 namespace SDN.Rss
 {
@@ -15,6 +16,8 @@ namespace SDN.Rss
 
         public string Summary { get; set; }
 
+        public HtmlWebViewSource Content { get; set; }
+
         public string Link { get; set; }
     }
 
@@ -25,14 +28,18 @@ namespace SDN.Rss
             using (var client = new HttpClient())
             {
                 var xmlFeed = await client.GetStringAsync(feedUrl);
-                var doc = XDocument.Parse(xmlFeed);
 
+                // HACK &euml; isn't valid XML but it's in there, so work around it..
+                xmlFeed = xmlFeed.Replace("&euml;", "ë");
+                var doc = XDocument.Parse(xmlFeed);
+                
                 var items = (from item in doc.Descendants("item")
                              select new RssNode
                              {
                                  Title = item.Element("title").Value,
                                  PubDate = item.Element("pubDate").Value,
-                                 Summary = StripTagsRegex(WebUtility.HtmlDecode(item.Element("description").Value)),
+                                 Summary = StripTagsRegex(item.Element("description").Value).Trim(),
+                                 Content = new HtmlWebViewSource { Html = "<html style=\"font-family: -apple-system;\">" + WebUtility.HtmlDecode(item.Element("description").Value) + "</html>" },
                                  Link = item.Element("link").Value
                              }).ToArray();
 
@@ -42,7 +49,7 @@ namespace SDN.Rss
 
         public static string StripTagsRegex(string source)
         {
-            return Regex.Replace(source, "<.*?>", string.Empty);
+            return Regex.Replace(source, "<.*?>", " ");
         }
     }
 }

@@ -7,7 +7,11 @@ namespace SDN.Rss
         public App()
         {
             // The root page of your application
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new Pages.MainPage())
+            {
+                BarBackgroundColor = Color.FromHex("#98BE0D"),
+                BarTextColor = Color.White
+            };
         }
 
         protected override void OnStart()

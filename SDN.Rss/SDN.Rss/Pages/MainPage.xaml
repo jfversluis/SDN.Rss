@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SDN.Rss.Pages.MainPage" Title="SDN Rss">
+  <StackLayout>
+    <SearchBar Placeholder="Zoeken..." TextChanged="SearchBar_OnTextChanged" CancelButtonColor="White">
+      <OnPlatform x:TypeArguments="Color">
+        <OnPlatform.iOS>
+          #98BE0D
+        </OnPlatform.iOS>
+      </OnPlatform>
+    </SearchBar>
+    <ListView x:Name="RssList" ItemsSource="{Binding RssNodes}" ItemSelected="RssList_OnItemSelected">
+      <ListView.ItemTemplate>
+        <OnPlatform x:TypeArguments="DataTemplate">
+          <OnPlatform.Android>
+            <DataTemplate>
+              <TextCell Text="{Binding Title}" Detail="{Binding Summary}" />
+            </DataTemplate>
+          </OnPlatform.Android>
+          <OnPlatform.iOS>
+            <DataTemplate>
+              <TextCell Text="{Binding Title}" Detail="{Binding Summary}" />
+            </DataTemplate>
+          </OnPlatform.iOS>
+          <OnPlatform.WinPhone>
+            <DataTemplate>
+              <TextCell Text="{Binding Title}" />
+            </DataTemplate>
+          </OnPlatform.WinPhone>
+        </OnPlatform>
+      </ListView.ItemTemplate>
+    </ListView>
+  </StackLayout>
+</ContentPage>
